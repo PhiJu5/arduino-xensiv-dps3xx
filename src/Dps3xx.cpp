@@ -11,17 +11,17 @@ int16_t Dps3xx::getContResults(float *tempBuffer,
     return DpsClass::getContResults(tempBuffer, tempCount, prsBuffer, prsCount, registers[FIFO_EMPTY]);
 }
 
-#ifndef DPS_DISABLESPI
 int16_t Dps3xx::setInterruptSources(uint8_t intr_source, uint8_t polarity)
 {
+    #ifndef DPS_DISABLESPI
     // Interrupts are not supported with 4 Wire SPI
     if (!m_SpiI2c & !m_threeWire)
     {
         return DPS__FAIL_UNKNOWN;
     }
+    #endif
     return writeByteBitfield(intr_source, registers[INT_SEL]) || writeByteBitfield(polarity, registers[INT_HL]);
 }
-#endif
 
 void Dps3xx::init(void)
 {
@@ -99,10 +99,10 @@ int16_t Dps3xx::readcoeffs(void)
     m_c0Half = ((uint32_t)buffer[0] << 4) | (((uint32_t)buffer[1] >> 4) & 0x0F);
     getTwosComplement(&m_c0Half, 12);
     // c0 is only used as c0*0.5, so c0_half is calculated immediately
-    m_c0Half = m_c0Half / 2U;
+    d_c0Half = m_c0Half = m_c0Half / 2U;
 
     // now do the same thing for all other coefficients
-    m_c1 = (((uint32_t)buffer[1] & 0x0F) << 8) | (uint32_t)buffer[2];
+    d_c1 = m_c1 = (((uint32_t)buffer[1] & 0x0F) << 8) | (uint32_t)buffer[2];
     getTwosComplement(&m_c1, 12);
     m_c00 = ((uint32_t)buffer[3] << 12) | ((uint32_t)buffer[4] << 4) | (((uint32_t)buffer[5] >> 4) & 0x0F);
     getTwosComplement(&m_c00, 20);
@@ -190,3 +190,4 @@ int16_t Dps3xx::flushFIFO()
 {
     return writeByteBitfield(1U, registers[FIFO_FL]);
 }
+

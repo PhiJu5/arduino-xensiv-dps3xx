@@ -15,7 +15,15 @@
 #define DPSCLASS_H_INCLUDED
 
 #include <Arduino.h>
+
+// Disable SPI for currently not supported platforms.
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_PSOC6) || defined(ARDUINO_ARCH_RENESAS)
 #define DPS_DISABLESPI
+#endif
+#ifndef DPS_DISABLESPI
+#define DPS_DISABLESPI
+#endif
+
 #ifndef DPS_DISABLESPI
 #include <SPI.h>
 #endif
@@ -232,6 +240,17 @@ public:
      */
     int16_t correctTemp(void);
 
+	void getOffsets(
+	  int32_t &c0Half,
+      int32_t &c1,
+	  int32_t &c00,
+      int32_t &c10,
+      int32_t &c01,
+      int32_t &c11,
+      int32_t &c20,
+      int32_t &c21,
+      int32_t &c30);
+	
 protected:
     // scaling factor table
     static const int32_t scaling_facts[DPS__NUM_OF_SCAL_FACTS];
@@ -258,6 +277,9 @@ protected:
     int32_t m_c20;
     int32_t m_c21;
     int32_t m_c30;
+
+	int32_t d_c0Half;
+    int32_t d_c1;
 
     // last measured scaled temperature (necessary for pressure compensation)
     float m_lastTempScal;

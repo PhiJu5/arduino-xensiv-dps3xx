@@ -804,3 +804,25 @@ int16_t DpsClass::getRawResult(int32_t *raw, RegBlock_t reg)
     getTwosComplement(raw, 24);
     return DPS__SUCCEEDED;
 }
+
+void DpsClass::getOffsets(
+	  int32_t &c0Half,
+      int32_t &c1,
+	  int32_t &c00,
+      int32_t &c10,
+      int32_t &c01,
+      int32_t &c11,
+      int32_t &c20,
+      int32_t &c21,
+      int32_t &c30)
+{
+	c0Half = d_c0Half;
+	c1 = d_c1;
+	c00 = m_c00;
+	c10 = m_c10;
+	c01 = m_c01;
+	c11 = m_c11;
+	c20 = m_c20;
+	c21 = m_c21;
+	c30 = m_c30;
+}

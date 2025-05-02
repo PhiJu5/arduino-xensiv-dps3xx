@@ -102,8 +102,9 @@ int16_t Dps3xx::readcoeffs(void)
     d_c0Half = m_c0Half = m_c0Half / 2U;
 
     // now do the same thing for all other coefficients
-    d_c1 = m_c1 = (((uint32_t)buffer[1] & 0x0F) << 8) | (uint32_t)buffer[2];
+    m_c1 = (((uint32_t)buffer[1] & 0x0F) << 8) | (uint32_t)buffer[2];
     getTwosComplement(&m_c1, 12);
+	d_c1 = m_c1;
     m_c00 = ((uint32_t)buffer[3] << 12) | ((uint32_t)buffer[4] << 4) | (((uint32_t)buffer[5] >> 4) & 0x0F);
     getTwosComplement(&m_c00, 20);
     m_c10 = (((uint32_t)buffer[5] & 0x0F) << 16) | ((uint32_t)buffer[6] << 8) | (uint32_t)buffer[7];

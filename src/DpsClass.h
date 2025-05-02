@@ -251,6 +251,9 @@ public:
       int32_t &c21,
       int32_t &c30);
 	
+	int32_t getTRaw(void) { return d_traw; };
+	  
+	
 protected:
     // scaling factor table
     static const int32_t scaling_facts[DPS__NUM_OF_SCAL_FACTS];
@@ -280,6 +283,7 @@ protected:
 
 	int32_t d_c0Half;
     int32_t d_c1;
+	int32_t d_traw;
 
     // last measured scaled temperature (necessary for pressure compensation)
     float m_lastTempScal;
